@@ -83,19 +83,14 @@
                 {{ choice.choice_text }} — {{ choice.votes }} vote{{ choice.votes|pluralize }}
             </div>
             <div class="progress-bar">
-                <div class="progress-bar-inner"
-                    style="width: {% if total_votes > 0 %}{{ choice.votes|divisibleby:total_votes|floatformat:0 }}%{% else %}0%{% endif %};">
-                    {% if total_votes > 0 %}
-                    {{ choice.votes }} ({{ choice.votes|divisibleby:total_votes|floatformat:0 }}%)
-                    {% endif %}
+                <div class="progress-bar-inner" style="width: {{ choice.votes|floatformat:0 }}%;">
+                    {{ choice.votes|floatformat:0 }}%
                 </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
-
         <a class="vote-again" href="{% url 'polls:detail' question.id %}">Vote again?</a>
     </div>
-
 </body>
 
 </html>

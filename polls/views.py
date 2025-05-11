@@ -44,6 +44,13 @@ class ResultsView(generic.DetailView):
     model = Question
     template_name = "polls/results.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        question = self.get_object()
+        total_votes = sum(choice.votes for choice in question.choice_set.all())
+        context["total_votes"] = total_votes
+        return context
+
 
 def vote(request, question_id):
     """Handle the voting process for a specific question.
