@@ -1,21 +1,110 @@
-<form action="{% url 'polls:vote' question.id %}" method="post">
-    {% csrf_token %}
-    <fieldset>
-        <legend><h1>{{ question.question_text }}</h1></legend>
+<!DOCTYPE html>
+<html>
 
-        {# Display image if exists #}
-        {% if question.image %}
-        <img src="{{ question.image.url }}" alt="Poll Image" style="max-width: 400px; margin-bottom: 20px;">
-        {% endif %}
+<head>
+    <meta charset="UTF-8">
+    <title>{{ question.question_text }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            padding: 30px;
+        }
 
-        {% if error_message %}
-        <p><strong>{{ error_message }}</strong></p>
-        {% endif %}
+        .poll-container {
+            display: flex;
+            gap: 30px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            max-width: 900px;
+            margin: auto;
+            flex-wrap: wrap;
+        }
 
-        {% for choice in question.choice_set.all %}
-        <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
-        <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
-        {% endfor %}
-    </fieldset>
-    <input type="submit" value="Vote">
-</form>
+        .poll-image {
+            flex: 1 1 250px;
+        }
+
+        .poll-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .poll-content {
+            flex: 2 1 400px;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .choice {
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .error-message {
+            color: red;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .submit-btn {
+            margin-top: 20px;
+            padding: 10px 25px;
+            font-size: 1rem;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .submit-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+
+    <form action="{% url 'polls:vote' question.id %}" method="post">
+        {% csrf_token %}
+        <fieldset>
+            <legend>
+                <h1>{{ question.question_text }}</h1>
+            </legend>
+
+            <div class="poll-container">
+                {% if question.image %}
+                <div class="poll-image">
+                    <img src="{{ question.image.url }}" alt="Poll Image">
+                </div>
+                {% endif %}
+
+                <div class="poll-content">
+                    {% if error_message %}
+                    <p class="error-message">{{ error_message }}</p>
+                    {% endif %}
+
+                    {% for choice in question.choice_set.all %}
+                    <div class="choice">
+                        <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+                        <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label>
+                    </div>
+                    {% endfor %}
+
+                    <!-- Submit button directly under choices -->
+                    <input type="submit" value="Vote" class="submit-btn">
+                </div>
+            </div>
+        </fieldset>
+    </form>
+
+</body>
+
+</html>

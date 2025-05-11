@@ -1,8 +1,96 @@
-<h1>{{ question.question_text }}</h1>
-<ul>
-{% for choice in question.choice_set.all %}
-    <li>{{ choice.choice_text }} -- {{ choice.votes }} vote{{ choice.votes|pluralize }}</li>
-{% endfor %}
-</ul>
+<!DOCTYPE html>
+<html>
 
-<a href="{% url 'polls:detail' question.id %}">Vote again?</a>
+<head>
+    <meta charset="UTF-8">
+    <title>Results - {{ question.question_text }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            padding: 30px;
+        }
+
+        .results-container {
+            background: #ffffff;
+            border-radius: 10px;
+            max-width: 900px;
+            margin: auto;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            color: #2c3e50;
+        }
+
+        .choice {
+            margin-bottom: 20px;
+        }
+
+        .choice-label {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #34495e;
+            margin-bottom: 6px;
+        }
+
+        .progress-bar {
+            background-color: #e0e0e0;
+            border-radius: 6px;
+            overflow: hidden;
+            height: 20px;
+        }
+
+        .progress-bar-inner {
+            height: 100%;
+            background-color: #007BFF;
+            text-align: right;
+            padding-right: 8px;
+            color: white;
+            font-size: 0.85rem;
+            line-height: 20px;
+            white-space: nowrap;
+        }
+
+        .vote-again {
+            display: inline-block;
+            margin-top: 30px;
+            text-decoration: none;
+            color: #ffffff;
+            background-color: #27ae60;
+            padding: 10px 25px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .vote-again:hover {
+            background-color: #219150;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="results-container">
+        <h1>{{ question.question_text }}</h1>
+
+        {% for choice in question.choice_set.all %}
+        <div class="choice">
+            <div class="choice-label">
+                {{ choice.choice_text }} — {{ choice.votes }} vote{{ choice.votes|pluralize }}
+            </div>
+            <div class="progress-bar">
+                <div class="progress-bar-inner" style="width: {{ choice.votes|floatformat:0 }}%;">
+                    {{ choice.votes|floatformat:0 }}%
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <a class="vote-again" href="{% url 'polls:detail' question.id %}">Vote again?</a>
+    </div>
+</body>
+
+</html>
